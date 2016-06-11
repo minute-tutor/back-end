@@ -7,8 +7,8 @@ var bodyParser = require('body-parser');
 var program = require('commander');
 
 program
-  .option('-e --extIP <extIP>', 'External IP to listen on', String)
-  .option('-d --dbIP <dbIP>', 'IP address of mongodb server', String)
+  .option('-e --extIP <extIP>', 'External IP to listen on', String, 'localhost')
+  .option('-d --dbIP <dbIP>', 'IP address of mongodb server', String, 'mongodb://localhost:27017')
   .option('-p --port <port>', 'Port to listen on', Number, process.env.PORT || 8080);
 program.parse(process.argv);
 
@@ -17,58 +17,34 @@ var mongo = require('mongodb');
 mongo.connect(program.dbIP, startListening);
 
 var db = null;
-var studentData = null;
+var usersCollection = null;
 
 var app = express();
 
-// uncomment after placing your favicon in /public
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-  app.use(function (err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: err
-    });
-  });
-}
-
-// production error handler
-// no stacktraces leaked to user
-app.use(function (err, req, res, next) {
-  res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
-  });
-});
-
 function startListening(err, db) {
-
   if (err) {
     // Print error to console
     return console.dir(err);
   } else {
     // Assign db to what we get
     this.db = db;
-    db.createCollection('studentData', function (err, collection) {
+    db.createCollection('users', function (err, collection) {
       if (!err) {
-        console.log("Created collection studentData!");
+        console.log("Created collection usersCollection!");
 
-        studentData = collection;
+        usersCollection = collection;
+        require('./routes.js')(app, usersCollection);
 
         app.listen(program.port, program.extIP);
         console.log("The good stuff lives on port: " + program.port);
       } else {
-        console.log("Error in creating studentData collection");
+        console.log("Error in creating usersCollection collection");
       }
-      require('./routes/studentPost.js')(app, studentData);
     });
   }
 }
