@@ -31,4 +31,3 @@ db.once('open', function () {
   app.listen(program.port, program.extIP); // listen for connections
   console.log("Listening on port     " + program.port);
 });
-
