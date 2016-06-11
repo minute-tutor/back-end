@@ -7,10 +7,10 @@ module.exports = function (app) {
     user.findOne({'google.token': token}).exec(function (err, user) {
       res.setHeader('Content-Type', 'application/json');
       if (!err) {
-        res.send(JSON.stringify({user: user}));
+        res.status(200).send(JSON.stringify({user: user}));
       } else {
-        res.send(JSON.stringify({user: null}))
+        res.status(200).send(JSON.stringify({user: null}));
       }
-    })
+    });
   });
 };
