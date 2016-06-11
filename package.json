@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "start": "node app.js",
+    "monitor": "nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,7 @@
     "express": "^4.13.4",
     "mongoose": "^4.4.20",
     "morgan": "^1.7.0",
+    "nodemon": "^1.9.2",
     "path": "^0.12.7",
     "serve-favicon": "^2.3.0"
   },
