@@ -9,7 +9,7 @@ var program = require('commander');
 // Commander command line flags
 program
   .option('-e --extIP <extIP>', 'External IP to listen on', String, 'localhost')
-  .option('-d --dbIP <dbIP>', 'IP address of mongodb server', String, 'mongodb://localhost:27017')
+  .option('-d --dbIP <dbIP>', 'IP address of mongodb server', String, 'mongodb://localhost:27017/minute-tutor/')
   .option('-p --port <port>', 'Port to listen on', Number, process.env.PORT || 8080);
 program.parse(process.argv);
 
