@@ -1,0 +1,28 @@
+{
+  "name": "back-end",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/minute-tutor/back-end.git"
+  },
+  "author": "Marc Bacvanski & Co.",
+  "bugs": {
+    "url": "https://github.com/minute-tutor/back-end/issues"
+  },
+  "dependencies": {
+    "body-parser": "^1.15.1",
+    "commander": "^2.9.0",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.13.4",
+    "morgan": "^1.7.0",
+    "path": "^0.12.7",
+    "serve-favicon": "^2.3.0"
+  },
+  "devDependencies": {
+    "mocha": "^2.5.3"
+  }
+}
