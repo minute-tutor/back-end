@@ -15,10 +15,12 @@
     "url": "https://github.com/minute-tutor/back-end/issues"
   },
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.15.1",
     "commander": "^2.9.0",
     "cookie-parser": "^1.4.3",
     "express": "^4.13.4",
+    "mongoose": "^4.4.20",
     "morgan": "^1.7.0",
     "path": "^0.12.7",
     "serve-favicon": "^2.3.0"
