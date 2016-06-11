@@ -19,4 +19,4 @@ var userSchema = mongoose.Schema({
 }, {collection: 'users'});
 
 // create the models for users and expose it to our app
-module.exports = mongoose.model('userModel', userSchema);
+module.exports = userSchema;

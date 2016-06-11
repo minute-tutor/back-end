@@ -7,4 +7,4 @@ var skillSchema = mongoose.Schema({
 }, {collection: 'skills'});
 
 // create the models for users and expose it to our app
-module.exports = mongoose.model('skillModel', skillSchema);
+module.exports = skillSchema;

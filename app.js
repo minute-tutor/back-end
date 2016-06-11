@@ -27,7 +27,7 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Mongoose Connection error:'));
 db.once('open', function () {
   console.log("Connection to DB successful!");
-  require('./routes')(app);
+  require('./routes/routes')(app);
   app.listen(program.port, program.extIP); // listen for connections
   console.log("Listening on port     " + program.port);
 });
