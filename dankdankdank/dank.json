@@ -1,0 +1,27 @@
+{
+  "google": {
+    "id": "myID",
+    "token": "myToken",
+    "email": "myEmail@email.com",
+    "name": "myName"
+  },
+  "money": 100,
+  "skills": [
+    {
+      "name": "skill1"
+    },
+    {
+      "name": "skill2"
+    }
+  ],
+  "reviews": [
+    {
+      "stars" : 5
+    },
+    {
+      "stars" : 4
+    }
+  ],
+  "rate": 10,
+  "skypeID": "MySkype"
+}
