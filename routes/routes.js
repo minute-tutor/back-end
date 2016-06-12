@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 module.exports = function (app) {
-  app.get('/userByToken/*', function (req, res) { // /user/token/
+  app.get('/getUserByToken/*', function (req, res) { // /user/token/
     var url = req.url;
     var token = url.substr(url.lastIndexOf("/") + 1, url.length);
     var user = require('./../models/user');
@@ -76,7 +76,29 @@ module.exports = function (app) {
   });
 
   app.post('/addreview/', function (req, res) {
-    var person = req.body.person;
+    var googleID = req.body.googleID;
     var review = req.body.review;
+
+    console.log("googleID = " + googleID);
+    console.log("review = " + review);
+
+    var reviewSchema = require('../models/review');
+    var reviewModel = mongoose.model('reviewModel', reviewSchema);
+
+    var newReview = new reviewModel;
+    newReview.stars = review;
+
+    console.log("new review = " + newReview);
+    
+    var userSchema = require('../models/user');
+    var userModel = mongoose.model('userModel', userSchema);
+    userModel.findOne({'google.id': googleID}, function (err, user) {
+      if (!err && user != null) {
+        user.reviews.push(newReview);
+        user.save();
+      } else {
+        throw err;
+      }
+    });
   });
 };
