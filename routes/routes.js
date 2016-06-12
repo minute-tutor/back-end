@@ -28,7 +28,14 @@ module.exports = function (app) {
     var rate = req.body.rate;
     var skypeid = req.body.skypeID;
 
-    console.log("got stuff");
+    console.log("id = " + gid);
+    console.log("email = " + gemail);
+    console.log("name = " + gname);
+    console.log("money = " + money);
+    console.log("skills = " + skills);
+    console.log("reviews = " + reviews);
+    console.log("rate = " + rate);
+    console.log("skypeid = " + skypeid);
 
     var userSchema = require('../models/user');
     var userModel = mongoose.model('userModel', userSchema)
