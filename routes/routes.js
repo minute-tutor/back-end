@@ -27,16 +27,6 @@ module.exports = function (app) {
     var rate = req.body.rate;
     var skypeid = req.body.skypeID;
 
-    console.log("id = " + gid);
-    console.log("gtoken = " + gtoken);
-    console.log("gemail = " + gemail);
-    console.log("gname = " + gname);
-    console.log("money = " + money);
-    console.log("skills = " + skills);
-    console.log("reviews = " + reviews);
-    console.log("rate = " + rate);
-    console.log("skypeid = " + skypeid);
-
     var userSchema = require('../models/user');
     var userModel = mongoose.model('userModel', userSchema)
 
@@ -56,7 +46,7 @@ module.exports = function (app) {
       if (err) {
         throw err;
       } else {
-        userModel.findOne({'google.id': gid}, function(err, user) {
+        userModel.findOne({'google.id': gid}, function (err, user) {
           if (!err) {
             var skillJSON = JSON.parse(skills);
             var skillSchema = require('../models/skill');
@@ -64,7 +54,6 @@ module.exports = function (app) {
             for (var i in skillJSON) {
               var newSkill = new skillModel;
               newSkill.name = skillJSON[i].name;
-              console.log("Adding skill: " + newSkill);
               user.skills.push(newSkill);
             }
             user.save();
@@ -79,17 +68,12 @@ module.exports = function (app) {
     var googleID = req.body.googleID;
     var review = req.body.review;
 
-    console.log("googleID = " + googleID);
-    console.log("review = " + review);
-
     var reviewSchema = require('../models/review');
     var reviewModel = mongoose.model('reviewModel', reviewSchema);
 
     var newReview = new reviewModel;
     newReview.stars = review;
 
-    console.log("new review = " + newReview);
-    
     var userSchema = require('../models/user');
     var userModel = mongoose.model('userModel', userSchema);
     userModel.findOne({'google.id': googleID}, function (err, user) {
