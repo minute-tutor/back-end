@@ -70,6 +70,8 @@ module.exports = function (app) {
             console.log("saving agagin");
             user.save();
             res.header('Access-Control-Allow-Origin: *');
+            res.header('Access-Control-Allow-Origin', 'http://localhost:63342/');
+            res.header('Access-Control-Allow-Origin', '*');
             res.status(200).send();
           } else {
             res.status(400).send();
