@@ -10,6 +10,7 @@ var userSchema = mongoose.Schema({
     email: String,
     name: String
   },
+  description: String,
   money: Number,
   skills: [skillSchema],
   reviews: [reviewSchema],

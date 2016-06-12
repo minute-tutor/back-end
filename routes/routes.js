@@ -40,21 +40,13 @@ module.exports = function (app) {
     var gemail = req.body.email;
     var gname = req.body.name;
 
+    var description = req.body.description;
     var money = 0;
     var skills = req.body.skills;
     var reviews = [];
     var rate = req.body.rate;
     var skypeid = req.body.skypeID;
     var lastLoggedIn = new Date().getTime();
-
-    console.log("id = " + gid);
-    console.log("email = " + gemail);
-    console.log("name = " + gname);
-    console.log("money = " + money);
-    console.log("skills = " + skills);
-    console.log("reviews = " + reviews);
-    console.log("rate = " + rate);
-    console.log("skypeid = " + skypeid);
 
     var userSchema = require('../models/user');
     var userModel = mongoose.model('userModel', userSchema)
@@ -64,7 +56,8 @@ module.exports = function (app) {
     // set all of the relevant information
     newUser.google.id = gid;
     newUser.google.name = gname;
-    newUser.google.email = gemail; // pull the first email
+    newUser.google.email = gemail;
+    newUser.description = description;
     newUser.money = money;
     newUser.reviews = reviews;
     newUser.rate = rate;
@@ -146,4 +139,6 @@ module.exports = function (app) {
       }
     })
   });
+
+  app.post('/')
 };
