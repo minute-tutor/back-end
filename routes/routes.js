@@ -3,9 +3,9 @@ var mongoose = require('mongoose');
 module.exports = function (app) {
   app.get('/getUserByToken/*', function (req, res) { // /user/token/
     var url = req.url;
-    var token = url.substr(url.lastIndexOf("/") + 1, url.length);
+    var id = url.substr(url.lastIndexOf("/") + 1, url.length);
     var user = require('./../models/user');
-    user.findOne({'google.token': token}).exec(function (err, user) {
+    user.findOne({'google.id': id}).exec(function (err, user) {
       res.setHeader('Content-Type', 'application/json');
       if (!err) {
         res.status(200).send(JSON.stringify({user: user}));
@@ -17,7 +17,6 @@ module.exports = function (app) {
 
   app.post('/newuser/', function (req, res) {
     var gid = req.body.id;
-    var gtoken = req.body.token;
     var gemail = req.body.email;
     var gname = req.body.name;
 
