@@ -140,18 +140,26 @@ module.exports = function (app) {
     })
   });
 
-  app.post('/updateDescription', function (req, res) {
-    var id = req.body.id;
-    var field = 'description';
-    var value = req.body.value;
+  app.post('/updateDescription/', function (req, res) {
+    var userID = req.body.id;
+    var description = req.body.description;
 
-    var ok = updateUserField(id, field, value);
-    if (ok) {
-      res.status(200).send();
-    } else {
-      res.status(500).send();
-    }
-  })
+    updateUserField(userID, 'description', description) ? res.status(200).send() : res.status(500).send();
+  });
+
+  app.post('/updateRate/', function (req, res) {
+    var userID = req.body.id;
+    var newRate = req.body.rate;
+
+    updateUserField(userID, 'rate', newRate) ? res.status(200).send() : res.status(500).send();
+  });
+
+  app.post('/updateSkypeID/', function (req, res) {
+    var userID = req.body.id;
+    var newSkype = req.body.skypeID;
+
+    updateUserField(userID, 'rate', newSkype) ? res.status(200).send() : res.status(500).send();
+  });
 };
 
 function updateUserField(id, field, value) {
