@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 module.exports = function (app) {
-  app.get('/getUserByID/*', function (req, res) { // /user/token/
+  app.get('/getUserByID/*', function (req, res) { // /user/id/
     var url = req.url;
     var id = url.substr(url.lastIndexOf("/") + 1, url.length);
     console.log("id = " + id);
@@ -62,6 +62,7 @@ module.exports = function (app) {
             }
             console.log("saving agagin");
             user.save();
+            res.header('Access-Control-Allow-Origin: *');
             res.status(200).send();
           } else {
             res.status(400).send();
