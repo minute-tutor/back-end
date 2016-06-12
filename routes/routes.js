@@ -72,6 +72,7 @@ module.exports = function (app) {
             res.header('Access-Control-Allow-Origin: *');
             res.header('Access-Control-Allow-Origin', 'http://localhost:63342/');
             res.header('Access-Control-Allow-Origin', '*');
+            res.header('Access-Control-Allow-Origin', 'http://localhost:*');
             res.status(200).send();
           } else {
             res.status(400).send();
@@ -82,7 +83,7 @@ module.exports = function (app) {
     console.log("done");
   });
 
-  app.post('/addreview/', function (req, res) {
+  app.post('/addreview/', function (req, res) { // Add all teh reviewz
     var googleID = req.body.googleID;
     var review = req.body.review;
 
@@ -99,6 +100,24 @@ module.exports = function (app) {
         user.reviews.push(newReview);
         user.save();
         res.status(200).send();
+      } else {
+        res.status(400).send();
+      }
+    });
+  });
+
+  app.get('/findUsersBySkill/*', function (req, res) {
+    var url = req.url;
+    var skillInQuestion = url.substr(url.lastIndexOf("/") + 1, url.length);
+
+    var userSchema = require('../models/user');
+    var userModel = mongoose.model('userModel', userSchema);
+
+    userModel.find({'skills.name': skillInQuestion}, function (err, data) {
+      if (!err) {
+        var stringified = JSON.stringify(data);
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).send(stringified);
       } else {
         res.status(400).send();
       }
