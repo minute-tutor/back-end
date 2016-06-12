@@ -34,7 +34,6 @@ module.exports = function (app) {
 
     // set all of the relevant information
     newUser.google.id = gid;
-    newUser.google.token = gtoken;
     newUser.google.name = gname;
     newUser.google.email = gemail; // pull the first email
     newUser.money = money;
@@ -57,9 +56,11 @@ module.exports = function (app) {
               user.skills.push(newSkill);
             }
             user.save();
+            res.status(200);
+          } else {
+            res.status(400);
           }
         });
-        res.status(200);
       }
     });
   });
@@ -80,8 +81,9 @@ module.exports = function (app) {
       if (!err && user != null) {
         user.reviews.push(newReview);
         user.save();
+        res.status(200);
       } else {
-        throw err;
+        res.status(400);
       }
     });
   });
