@@ -1,39 +1,6 @@
 var mongoose = require('mongoose');
 
 module.exports = function (app) {
-  app.get('/getUserByID/*', function (req, res) { // /user/id/
-    var url = req.url;
-    var id = url.substr(url.lastIndexOf("/") + 1, url.length);
-    console.log("id = " + id);
-    var userSchema = require('./../models/user');
-    var userModel = mongoose.model('userModel', userSchema);
-    userModel.findOne({'google.id': id}, function (err, user) {
-      res.setHeader('Content-Type', 'application/json');
-      if (!err) {
-        res.status(200).send(JSON.stringify({user: user}));
-      } else {
-        res.status(200).send(JSON.stringify({user: null}));
-      }
-    });
-  });
-
-  app.get('/findUsersBySkill/*', function (req, res) {
-    var url = req.url;
-    var skillInQuestion = url.substr(url.lastIndexOf("/") + 1, url.length);
-
-    var userSchema = require('../models/user');
-    var userModel = mongoose.model('userModel', userSchema);
-
-    userModel.find({'skills.name': skillInQuestion}, function (err, data) {
-      if (!err) {
-        var stringified = JSON.stringify(data);
-        res.setHeader('Content-Type', 'application/json');
-        res.status(200).send(stringified);
-      } else {
-        res.status(400).send();
-      }
-    });
-  });
 
   app.post('/newuser/', function (req, res) {
     var gid = req.body.id;
@@ -96,29 +63,6 @@ module.exports = function (app) {
     console.log("done");
   });
 
-  app.post('/addreview/', function (req, res) { // Add all teh reviewz
-    var googleID = req.body.id;
-    var review = req.body.review;
-
-    var reviewSchema = require('../models/review');
-    var reviewModel = mongoose.model('reviewModel', reviewSchema);
-
-    var newReview = new reviewModel;
-    newReview.stars = review;
-
-    var userSchema = require('../models/user');
-    var userModel = mongoose.model('userModel', userSchema);
-    userModel.findOne({'google.id': googleID}, function (err, user) {
-      if (!err && user != null) {
-        user.reviews.push(newReview);
-        user.save();
-        res.status(200).send();
-      } else {
-        res.status(400).send();
-      }
-    });
-  });
-
   app.post('/updateLogin/', function (req, res) {
     var userID = req.body.id;
     var timestamp = req.body.timestamp;
@@ -160,7 +104,85 @@ module.exports = function (app) {
 
     updateUserField(userID, 'rate', newSkype) ? res.status(200).send() : res.status(500).send();
   });
+
+  app.post('/addreview/', function (req, res) { // Add all teh reviewz
+    var userID = req.body.id;
+    var review = req.body.review;
+
+    var reviewSchema = require('../models/review');
+    var reviewModel = mongoose.model('reviewModel', reviewSchema);
+
+    var newReview = new reviewModel;
+    newReview.stars = review;
+
+    updateUserArray(userID, 'reviews', newReview, res);
+  });
+
+  app.post('/addSkill/', function (req, res) {
+    var userID = req.body.id;
+    var skill = req.body.skill;
+
+    var skillSchema = require('../models/skill');
+    var skillModel = mongoose.model('skillModel', skillSchema);
+
+    var newSkill = new skillModel;
+    newSkill.name = skill;
+
+    updateUserArray(userID, 'skills', newSkill, res);
+  });
+
+  app.get('/getUserByID/*', function (req, res) { // /user/id/
+    var url = req.url;
+    var id = url.substr(url.lastIndexOf("/") + 1, url.length);
+    console.log("id = " + id);
+    var userSchema = require('./../models/user');
+    var userModel = mongoose.model('userModel', userSchema);
+    userModel.findOne({'google.id': id}, function (err, user) {
+      res.setHeader('Content-Type', 'application/json');
+      res.header('Access-Control-Allow-Origin: *');
+      res.header('Access-Control-Allow-Origin', 'http://localhost:63342/');
+      res.header('Access-Control-Allow-Origin', '*');
+      if (!err) {
+        res.status(200).send(JSON.stringify({user: user}));
+      } else {
+        res.status(200).send(JSON.stringify({user: null}));
+      }
+    });
+  });
+
+  app.get('/findUsersBySkill/*', function (req, res) {
+    var url = req.url;
+    var skillInQuestion = url.substr(url.lastIndexOf("/") + 1, url.length);
+
+    var userSchema = require('../models/user');
+    var userModel = mongoose.model('userModel', userSchema);
+
+    userModel.find({'skills.name': skillInQuestion}, function (err, data) {
+      if (!err) {
+        var stringified = JSON.stringify(data);
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).send(stringified);
+      } else {
+        res.status(400).send();
+      }
+    });
+  });
 };
+
+function updateUserArray(id, field, value, res) {
+  var userSchema = require('../models/user');
+  var userModel = mongoose.model('userModel', userSchema);
+
+  userModel.findOne({'google.id': id}, function (err, user) {
+    if (!err && user != null) {
+      user[field].push(value);
+      user.save();
+      res.status(200).send();
+    } else {
+      res.status(500).send();
+    }
+  });
+}
 
 function updateUserField(id, field, value) {
   var userSchema = require('../models/user');
