@@ -14,7 +14,8 @@ var userSchema = mongoose.Schema({
   skills: [skillSchema],
   reviews: [reviewSchema],
   rate: Number,
-  skypeID: String
+  skypeID: String,
+  lastLoggedIn: Number
 }, {collection: 'users'});
 
 // create the models for users and expose it to our app

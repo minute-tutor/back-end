@@ -17,6 +17,24 @@ module.exports = function (app) {
     });
   });
 
+  app.get('/findUsersBySkill/*', function (req, res) {
+    var url = req.url;
+    var skillInQuestion = url.substr(url.lastIndexOf("/") + 1, url.length);
+
+    var userSchema = require('../models/user');
+    var userModel = mongoose.model('userModel', userSchema);
+
+    userModel.find({'skills.name': skillInQuestion}, function (err, data) {
+      if (!err) {
+        var stringified = JSON.stringify(data);
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).send(stringified);
+      } else {
+        res.status(400).send();
+      }
+    });
+  });
+
   app.post('/newuser/', function (req, res) {
     var gid = req.body.id;
     var gemail = req.body.email;
@@ -27,6 +45,7 @@ module.exports = function (app) {
     var reviews = [];
     var rate = req.body.rate;
     var skypeid = req.body.skypeID;
+    var lastLoggedIn = new Date().getTime();
 
     console.log("id = " + gid);
     console.log("email = " + gemail);
@@ -50,6 +69,7 @@ module.exports = function (app) {
     newUser.reviews = reviews;
     newUser.rate = rate;
     newUser.skypeID = skypeid;
+    newUser.lastLoggedIn = lastLoggedIn;
 
     newUser.save(function (err) {
       if (err) {
@@ -84,7 +104,7 @@ module.exports = function (app) {
   });
 
   app.post('/addreview/', function (req, res) { // Add all teh reviewz
-    var googleID = req.body.googleID;
+    var googleID = req.body.id;
     var review = req.body.review;
 
     var reviewSchema = require('../models/review');
@@ -106,21 +126,24 @@ module.exports = function (app) {
     });
   });
 
-  app.get('/findUsersBySkill/*', function (req, res) {
-    var url = req.url;
-    var skillInQuestion = url.substr(url.lastIndexOf("/") + 1, url.length);
+  app.post('/updateLogin/', function (req, res) {
+    var userID = req.body.id;
+    var timestamp = req.body.timestamp;
 
+    console.log("userID" + userID);
+    console.log("timestamp" + timestamp);
+    
     var userSchema = require('../models/user');
     var userModel = mongoose.model('userModel', userSchema);
 
-    userModel.find({'skills.name': skillInQuestion}, function (err, data) {
-      if (!err) {
-        var stringified = JSON.stringify(data);
-        res.setHeader('Content-Type', 'application/json');
-        res.status(200).send(stringified);
+    userModel.findOne({'google.id' : userID}, function(err, user) {
+      if (!err && user != null) {
+        user.lastLoggedIn = timestamp;
+        user.save();
+        res.status(200).send();
       } else {
         res.status(400).send();
       }
-    });
+    })
   });
 };
