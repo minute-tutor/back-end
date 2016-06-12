@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 module.exports = function (app) {
-  app.get('/getUserByToken/*', function (req, res) { // /user/token/
+  app.get('/getUserByID/*', function (req, res) { // /user/token/
     var url = req.url;
     var id = url.substr(url.lastIndexOf("/") + 1, url.length);
     console.log("id = " + id);
