@@ -28,6 +28,8 @@ module.exports = function (app) {
     var rate = req.body.rate;
     var skypeid = req.body.skypeID;
 
+    console.log("got stuff");
+
     var userSchema = require('../models/user');
     var userModel = mongoose.model('userModel', userSchema)
 
@@ -46,6 +48,7 @@ module.exports = function (app) {
       if (err) {
         throw err;
       } else {
+        console.log("saved");
         userModel.findOne({'google.id': gid}, function (err, user) {
           if (!err) {
             var skillJSON = JSON.parse(skills);
@@ -55,15 +58,18 @@ module.exports = function (app) {
               var newSkill = new skillModel;
               newSkill.name = skillJSON[i].name;
               user.skills.push(newSkill);
+              console.log("pushed new skill " + newSkill);
             }
+            console.log("saving agagin");
             user.save();
-            res.status(200);
+            res.status(200).send();
           } else {
-            res.status(400);
+            res.status(400).send();
           }
         });
       }
     });
+    console.log("done");
   });
 
   app.post('/addreview/', function (req, res) {
@@ -82,9 +88,9 @@ module.exports = function (app) {
       if (!err && user != null) {
         user.reviews.push(newReview);
         user.save();
-        res.status(200);
+        res.status(200).send();
       } else {
-        res.status(400);
+        res.status(400).send();
       }
     });
   });
