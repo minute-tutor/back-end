@@ -125,11 +125,11 @@ module.exports = function (app) {
 
     console.log("userID" + userID);
     console.log("timestamp" + timestamp);
-    
+
     var userSchema = require('../models/user');
     var userModel = mongoose.model('userModel', userSchema);
 
-    userModel.findOne({'google.id' : userID}, function(err, user) {
+    userModel.findOne({'google.id': userID}, function (err, user) {
       if (!err && user != null) {
         user.lastLoggedIn = timestamp;
         user.save();
@@ -140,5 +140,31 @@ module.exports = function (app) {
     })
   });
 
-  app.post('/')
+  app.post('/updateDescription', function (req, res) {
+    var id = req.body.id;
+    var field = 'description';
+    var value = req.body.value;
+
+    var ok = updateUserField(id, field, value);
+    if (ok) {
+      res.status(200).send();
+    } else {
+      res.status(500).send();
+    }
+  })
 };
+
+function updateUserField(id, field, value) {
+  var userSchema = require('../models/user');
+  var userModel = mongoose.model('userModel', userSchema);
+
+  userModel.findOne({'google.id': id}, function (err, user) {
+    if (!err && user != null) {
+      user[field] = value;
+      user.save();
+      return true;
+    } else {
+      return false;
+    }
+  });
+}
