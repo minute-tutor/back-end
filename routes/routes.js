@@ -4,8 +4,10 @@ module.exports = function (app) {
   app.get('/getUserByToken/*', function (req, res) { // /user/token/
     var url = req.url;
     var id = url.substr(url.lastIndexOf("/") + 1, url.length);
-    var user = require('./../models/user');
-    user.findOne({'google.id': id}).exec(function (err, user) {
+    console.log("id = " + id);
+    var userSchema = require('./../models/user');
+    var userModel = mongoose.model('userModel', userSchema);
+    userModel.findOne({'google.id': id}, function (err, user) {
       res.setHeader('Content-Type', 'application/json');
       if (!err) {
         res.status(200).send(JSON.stringify({user: user}));
